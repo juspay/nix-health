@@ -4,7 +4,7 @@ slug: /health
 
 # Nix Health
 
-[nix-health](https://github.com/juspay/nix-browser/tree/main/crates/nix_health)[^1] is a program that checks the health of your Nix install. Furthermore, individual projects can configure their own health checks in their `flake.nix`. For example, the nammayatri project checks that [the cachix cache is in use](https://github.com/nammayatri/nammayatri/blob/2201f618af69dc78070fefeb4f082420b1d226cc/flake.nix#L29-L31).
+[nix-health](https://github.com/juspay/nix_health)[^1] is a program that checks the health of your Nix install. Furthermore, individual projects can configure their own health checks in their `flake.nix`. For example, the nammayatri project checks that [the cachix cache is in use](https://github.com/nammayatri/nammayatri/blob/2201f618af69dc78070fefeb4f082420b1d226cc/flake.nix#L29-L31).
 
 [^1]: nix-health originally began as a script <https://github.com/srid/nix-health> which is now deprecated.
 
@@ -32,14 +32,14 @@ Note that some checks are considered non-essential. For eg., the disk space chec
 nix-health is still in development. To run the development version,
 
 ```bash
-nix run "github:juspay/nix-browser#nix-health"
+nix run "github:juspay/nix-health"
 ```
 
 To run nix-health along with health check configuration specified in a project flake, pass that flake as an argument. For eg., to run nix-health with additional checks from the nammayatri project, run:
 
 ```bash
 # The argument can be any flake URL (including a local path)
-nix run "github:juspay/nix-browser#nix-health" github:nammayatri/nammayatri
+nix run "github:juspay/nix-health" github:nammayatri/nammayatri
 ```
 
 ## Configuring in `flake.nix` {#conf}

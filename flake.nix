@@ -41,6 +41,9 @@
         };
 
         devShells.default = self'.devShells.nix_health;
+        packages.default = self'.packages.nix_health.overrideAttrs ({
+          meta.mainProgram = "nix-health";
+        });
       };
     };
 }

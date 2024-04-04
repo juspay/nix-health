@@ -4,7 +4,7 @@ slug: /health
 
 # Nix Health
 
-[nix-health](https://github.com/juspay/nix_health)[^1] is a program that checks the health of your Nix install. Furthermore, individual projects can configure their own health checks in their `flake.nix`. For example, the nammayatri project checks that [the cachix cache is in use](https://github.com/nammayatri/nammayatri/blob/2201f618af69dc78070fefeb4f082420b1d226cc/flake.nix#L29-L31).
+[nix-health](https://github.com/juspay/nix-health)[^1] is a program that checks the health of your Nix install. Furthermore, individual projects can configure their own health checks in their `flake.nix`. For example, the nammayatri project checks that [the cachix cache is in use](https://github.com/nammayatri/nammayatri/blob/2201f618af69dc78070fefeb4f082420b1d226cc/flake.nix#L29-L31).
 
 [^1]: nix-health originally began as a script <https://github.com/srid/nix-health> which is now deprecated.
 

@@ -583,7 +583,7 @@ dependencies = [
 
 [[package]]
 name = "nix_health"
-version = "0.2.3"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "bytesize",

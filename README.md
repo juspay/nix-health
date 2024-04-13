@@ -29,7 +29,10 @@ Note that some checks are considered non-essential. For eg., the disk space chec
 
 ## Usage
 
-nix-health is still in development. To run the development version,
+>[!note]
+>nix-health `0.3.0` is [available](https://github.com/NixOS/nixpkgs/pull/303283) on nixpkgs.
+
+To run the development version,
 
 ```bash
 nix run "github:juspay/nix-health"

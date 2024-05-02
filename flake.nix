@@ -10,6 +10,10 @@
     systems.url = "github:nix-systems/default";
     rust-flake.url = "github:juspay/rust-flake";
     rust-flake.inputs.nixpkgs.follows = "nixpkgs";
+    # TODO: Remove crane after https://github.com/juspay/rust-flake/pull/8
+    rust-flake.inputs.crane.follows = "crane";
+    crane.url = "github:ipetkov/crane";
+    crane.inputs.nixpkgs.follows = "nixpkgs";
 
     # Dev tools
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -36,6 +40,9 @@
           nativeBuildInputs = with pkgs; [
             nix # Tests need nix cli
           ];
+        } // lib.optionalAttrs pkgs.stdenv.isLinux {
+          CARGO_BUILD_TARGET = "x86_64-unknown-linux-musl";
+          CARGO_BUILD_RUSTFLAGS = "-C target-feature=+crt-static";
         };
 
         # Add your auto-formatters here.

@@ -3,22 +3,20 @@
     "crane": {
       "inputs": {
         "nixpkgs": [
-          "rust-flake",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1707685877,
-        "narHash": "sha256-XoXRS+5whotelr1rHiZle5t5hDg9kpguS5yk8c8qzOc=",
+        "lastModified": 1718474113,
+        "narHash": "sha256-UKrfy/46YF2TRnxTtKCYzqf2f5ZPRRWwKCCJb7O5X8U=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "2c653e4478476a52c6aa3ac0495e4dea7449ea0e",
+        "rev": "0095fd8ea00ae0a9e6014f39c375e40c2fbd3386",
         "type": "github"
       },
       "original": {
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "2c653e4478476a52c6aa3ac0495e4dea7449ea0e",
         "type": "github"
       }
     },
@@ -126,6 +124,7 @@
     },
     "root": {
       "inputs": {
+        "crane": "crane",
         "flake-parts": "flake-parts",
         "nixpkgs": "nixpkgs",
         "rust-flake": "rust-flake",
@@ -135,18 +134,20 @@
     },
     "rust-flake": {
       "inputs": {
-        "crane": "crane",
+        "crane": [
+          "crane"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ],
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1712193152,
-        "narHash": "sha256-flsXt92BrijmpbzW2cvO181t9x5w651hFndFnNoyBMU=",
+        "lastModified": 1713513388,
+        "narHash": "sha256-zD/71fAvMuXM9bJWw+otTkAQ9HVP6REh+wg0+Y25EG0=",
         "owner": "juspay",
         "repo": "rust-flake",
-        "rev": "eddd86d1a47c8b4078e5da59866bac26b5726c47",
+        "rev": "2a4d19a8bc5bb5acef91e4440a47199a7fdca2f5",
         "type": "github"
       },
       "original": {

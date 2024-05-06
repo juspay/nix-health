@@ -35,14 +35,14 @@ Note that some checks are considered non-essential. For eg., the disk space chec
 To run the development version,
 
 ```bash
-nix run "github:juspay/nix-health"
+nix --accept-flake-config run github:juspay/nix-health
 ```
 
 To run nix-health along with health check configuration specified in a project flake, pass that flake as an argument. For eg., to run nix-health with additional checks from the nammayatri project, run:
 
 ```bash
 # The argument can be any flake URL (including a local path)
-nix run "github:juspay/nix-health" github:nammayatri/nammayatri
+nix --accept-flake-config run github:juspay/nix-health github:nammayatri/nammayatri
 ```
 
 ## Configuring in `flake.nix` {#conf}

@@ -48,7 +48,12 @@
           };
         };
 
-        devShells.default = self'.devShells.nix_health;
+        devShells.default = pkgs.mkShell {
+          inputsFrom = [
+            self'.devShells.nix_health
+            config.treefmt.build.devShell
+          ];
+        };
         packages.default = self'.packages.nix_health.overrideAttrs ({
           meta.mainProgram = "nix-health";
         });

@@ -38,7 +38,10 @@ impl Checkable for MinNixVersion {
                 CheckResult::Green
             } else {
                 CheckResult::Red {
-                    msg: format!("Your Nix version ({}) is too old; we require at least {}", val, self.min_required),
+                    msg: format!(
+                        "Your Nix version ({}) is too old; we require at least {}",
+                        val, self.min_required
+                    ),
                     suggestion: "See https://nix.dev/manual/nix/2.19/installation/upgrading".into(),
                 }
             },

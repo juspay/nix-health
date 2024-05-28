@@ -90,15 +90,27 @@ $ nix eval --impure --expr 'builtins.fromJSON (builtins.readFile ./schema.json)'
 
 ### Adding devShell check
 
-You can automatically run `nix-health` whenever your Nix dev shell starts. Add the following to the `shellHook` attribute of your dev shell. For example,
+You can automatically run `nix-health` whenever your Nix dev shell starts. To do this, import the flake module in your flake and use it in your devShell:
 
 ```nix
-devShells.default = pkgs.mkShell {
-  shellHook = ''
-    trap "${lib.getExe pkgs.toilet} NIX SHELL FAILED --filter gay -f smmono9" ERR
-
-    ${lib.getExe pkgs.nix-health} --quiet .
-  '';
+{
+  inputs = {
+    # NOTE: refers to ./module flake.
+    nix-health.url = "github:juspay/nix-health?dir=module";
+  };
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        inputs.nix-health.flakeModule
+      ];
+      perSystem = { config, pkgs, ... }: {
+        devShells.default = pkgs.mkShell {
+          inputsFrom = [
+            config.nix-health.outputs.devShell
+          ]
+        };
+      };
+    };
 }
 ```
 
@@ -112,6 +124,7 @@ flake.nix-health.default = {
 
 you can expect the devShell to print a giant message like this:
 
-<img width="555" alt="image" src="https://github.com/juspay/nix-health/assets/3998/8384d5e0-f5b7-4c42-9baa-cac5ea1af025">
+<img width="501" alt="image" src="https://github.com/juspay/nix-health/assets/3998/9f3b3141-611f-484f-b897-3e375c02dff5">
+
 
 Note that you will still be dropped into the Nix dev shell (there's no way to abrupt the launching of a dev Shell).

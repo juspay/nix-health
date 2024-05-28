@@ -22,6 +22,7 @@
         inputs.treefmt-nix.flakeModule
         inputs.rust-flake.flakeModules.default
         inputs.rust-flake.flakeModules.nixpkgs
+        ./module/flake-module.nix
       ];
       perSystem = { config, self', pkgs, lib, system, ... }: {
         rust-project.crane.args = {
@@ -52,20 +53,19 @@
           inputsFrom = [
             self'.devShells.nix_health
             config.treefmt.build.devShell
+            config.nix-health.outputs.devShell
           ];
-          shellHook = ''
-            trap "${lib.getExe pkgs.toilet} NIX SHELL FAILED --filter gay -f smmono9" ERR
-
-            ${lib.getExe pkgs.nix-health} --quiet .
-          '';
         };
         packages.default = self'.packages.nix_health.overrideAttrs ({
           meta.mainProgram = "nix-health";
         });
       };
 
-      flake.nix-health.default = {
-        nix-version.min-required = "2.17.0";
+      flake = {
+        flakeModule = ./module/flake-module.nix;
+        nix-health.default = {
+          nix-version.min-required = "2.17.0";
+        };
       };
     };
 }

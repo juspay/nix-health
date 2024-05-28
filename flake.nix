@@ -53,10 +53,19 @@
             self'.devShells.nix_health
             config.treefmt.build.devShell
           ];
+          shellHook = ''
+            trap "${lib.getExe pkgs.toilet} NIX SHELL FAILED --filter gay -f smmono9" ERR
+
+            ${lib.getExe pkgs.nix-health} --quiet .
+          '';
         };
         packages.default = self'.packages.nix_health.overrideAttrs ({
           meta.mainProgram = "nix-health";
         });
+      };
+
+      flake.nix-health.default = {
+        nix-version.min-required = "2.17.0";
       };
     };
 }

@@ -87,3 +87,31 @@ $ nix eval --impure --expr 'builtins.fromJSON (builtins.readFile ./schema.json)'
   trusted-users = {};
 }
 ```
+
+### Adding devShell check
+
+You can automatically run `nix-health` whenever your Nix dev shell starts. Add the following to the `shellHook` attribute of your dev shell. For example,
+
+```nix
+devShells.default = pkgs.mkShell {
+  shellHook = ''
+    trap "${lib.getExe pkgs.toilet} NIX SHELL FAILED --filter gay -f smmono9" ERR
+
+    ${lib.getExe pkgs.nix-health} --quiet .
+  '';
+}
+```
+
+Now suppose you have Nix 2.18 installed, but your project requires 2.19 or above due to the following config in its `flake.nix`:
+
+```nix
+flake.nix-health.default = {
+  nix-version.min-required = "2.19.0";
+};
+```
+
+you can expect the devShell to print a giant message like this:
+
+<img width="555" alt="image" src="https://github.com/juspay/nix-health/assets/3998/8384d5e0-f5b7-4c42-9baa-cac5ea1af025">
+
+Note that you will still be dropped into the Nix dev shell (there's no way to abrupt the launching of a dev Shell).

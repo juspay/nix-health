@@ -35,6 +35,8 @@ Note that some checks are considered non-essential. For eg., the disk space chec
 To run the development version,
 
 ```bash
+# NOTE: You may have to add `--extra-experimental-features "flakes nix-command"`
+# if flakes are not already enabled
 nix --accept-flake-config run github:juspay/nix-health
 ```
 

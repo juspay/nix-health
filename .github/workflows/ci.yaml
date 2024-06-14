@@ -15,4 +15,4 @@ jobs:
       - name: Build
         run: nixci build --systems "github:nix-systems/${{ matrix.system }}"
       - name: Run
-        run: nix run
+        run: nix --option system ${{ matrix.system }} run

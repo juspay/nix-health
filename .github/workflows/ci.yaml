@@ -16,3 +16,4 @@ jobs:
         run: nixci build --systems "github:nix-systems/${{ matrix.system }}"
       - name: Run
         run: nix --option system ${{ matrix.system }} run
+        if: "!(matrix.system == 'x86_64-darwin')"  # Skip rosetta runs (that will fail anyway)

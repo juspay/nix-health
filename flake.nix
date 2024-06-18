@@ -10,10 +10,6 @@
     systems.url = "github:nix-systems/default";
     rust-flake.url = "github:juspay/rust-flake";
     rust-flake.inputs.nixpkgs.follows = "nixpkgs";
-    # TODO: Remove crane after https://github.com/juspay/rust-flake/pull/8
-    rust-flake.inputs.crane.follows = "crane";
-    crane.url = "github:ipetkov/crane";
-    crane.inputs.nixpkgs.follows = "nixpkgs";
 
     # Dev tools
     treefmt-nix.url = "github:numtide/treefmt-nix";

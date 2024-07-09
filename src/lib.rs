@@ -5,8 +5,8 @@ pub mod report;
 pub mod traits;
 
 use check::direnv::Direnv;
-use nix_rs::flake::url::FlakeUrl;
 use nix_rs::command::NixCmd;
+use nix_rs::flake::url::FlakeUrl;
 use serde::{Deserialize, Serialize};
 use tracing::instrument;
 

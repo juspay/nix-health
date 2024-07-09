@@ -6,6 +6,7 @@ pub mod traits;
 
 use check::direnv::Direnv;
 use nix_rs::flake::url::FlakeUrl;
+use nix_rs::command::NixCmd;
 use serde::{Deserialize, Serialize};
 use tracing::instrument;
 
@@ -58,8 +59,9 @@ impl NixHealth {
     pub async fn from_flake(
         url: nix_rs::flake::url::FlakeUrl,
     ) -> Result<Self, nix_rs::command::NixCmdError> {
+        let nix = NixCmd::default();
         use nix_rs::flake::eval::nix_eval_attr_json;
-        nix_eval_attr_json(&url, true).await
+        nix_eval_attr_json(&nix, &url, true).await
     }
 
     /// Run all checks and collect the results

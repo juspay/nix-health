@@ -11,7 +11,7 @@ pub trait Checkable {
         &self,
         nix_info: &nix_rs::info::NixInfo,
         /// The flake against which the check is being run
-        /// 
+        ///
         /// If None, the check is run against the current environment, with no
         /// specific configuration from a flake.
         flake: Option<nix_rs::flake::url::FlakeUrl>,

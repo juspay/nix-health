@@ -128,5 +128,4 @@ you can expect the devShell to print a giant message like this:
 
 <img width="501" alt="image" src="https://github.com/juspay/nix-health/assets/3998/9f3b3141-611f-484f-b897-3e375c02dff5">
 
-
 Note that you will still be dropped into the Nix dev shell (there's no way to abrupt the launching of a dev Shell).

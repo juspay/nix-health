@@ -12,7 +12,7 @@ impl Checkable for FlakeEnabled {
     fn check(
         &self,
         nix_info: &info::NixInfo,
-        _: Option<nix_rs::flake::url::FlakeUrl>,
+        _: Option<&nix_rs::flake::url::FlakeUrl>,
     ) -> Vec<Check> {
         let val = &nix_info.nix_config.experimental_features.value;
         let check = Check {

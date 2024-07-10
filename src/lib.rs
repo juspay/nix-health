@@ -86,7 +86,7 @@ impl NixHealth {
     ) -> Vec<traits::Check> {
         tracing::info!("🩺 Running health checks");
         items
-            .flat_map(|c| c.check(nix_info, flake_url.clone()))
+            .flat_map(|c| c.check(nix_info, flake_url.as_ref()))
             .collect()
     }
 

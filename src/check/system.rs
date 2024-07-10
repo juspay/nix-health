@@ -32,7 +32,7 @@ impl Checkable for System {
     fn check(
         &self,
         nix_info: &nix_rs::info::NixInfo,
-        _: Option<nix_rs::flake::url::FlakeUrl>,
+        _: Option<&nix_rs::flake::url::FlakeUrl>,
     ) -> Vec<Check> {
         let mut checks = vec![];
         let nix_env = &nix_info.nix_env;

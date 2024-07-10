@@ -14,7 +14,7 @@ pub trait Checkable {
         //
         // If None, the check is run against the current environment, with no
         // specific configuration from a flake.
-        flake: Option<nix_rs::flake::url::FlakeUrl>,
+        flake: Option<&nix_rs::flake::url::FlakeUrl>,
     ) -> Vec<Check>;
 }
 

@@ -24,7 +24,7 @@ impl Checkable for Caches {
     fn check(
         &self,
         nix_info: &info::NixInfo,
-        _: Option<nix_rs::flake::url::FlakeUrl>,
+        _: Option<&nix_rs::flake::url::FlakeUrl>,
     ) -> Vec<Check> {
         let val = &nix_info.nix_config.substituters.value;
         let missing_caches = self

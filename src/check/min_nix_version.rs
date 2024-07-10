@@ -28,7 +28,7 @@ impl Checkable for MinNixVersion {
     fn check(
         &self,
         nix_info: &info::NixInfo,
-        _: Option<nix_rs::flake::url::FlakeUrl>,
+        _: Option<&nix_rs::flake::url::FlakeUrl>,
     ) -> Vec<Check> {
         let val = &nix_info.nix_version;
         let check = Check {

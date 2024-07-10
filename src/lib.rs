@@ -5,7 +5,6 @@ pub mod report;
 pub mod traits;
 
 use colored::Colorize;
-use std::vec::IntoIter;
 
 use check::direnv::Direnv;
 use nix_rs::command::NixCmd;
@@ -76,16 +75,8 @@ impl NixHealth {
         nix_info: &nix_rs::info::NixInfo,
         flake_url: Option<FlakeUrl>,
     ) -> Vec<traits::Check> {
-        NixHealth::run_checks_with(self.into_iter(), nix_info, flake_url)
-    }
-
-    pub fn run_checks_with(
-        items: IntoIter<&dyn traits::Checkable>,
-        nix_info: &nix_rs::info::NixInfo,
-        flake_url: Option<FlakeUrl>,
-    ) -> Vec<traits::Check> {
         tracing::info!("🩺 Running health checks");
-        items
+        self.into_iter()
             .flat_map(|c| c.check(nix_info, flake_url.as_ref()))
             .collect()
     }
@@ -141,6 +132,7 @@ impl AllChecksResult {
         }
     }
 
+    /// Print a summary report of the checks and return the exit code
     fn report(self) -> i32 {
         match self {
             AllChecksResult::Pass => {

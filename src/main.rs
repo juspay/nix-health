@@ -28,10 +28,7 @@ async fn main() -> anyhow::Result<()> {
         return Ok(());
     }
 
-    let flake_url = args
-        .flake_url
-        .map(|url| url.with_fully_qualified_root_attr("nix-health"));
-    let checks = run_checks(flake_url).await?;
+    let checks = run_checks(args.flake_url).await?;
 
     let exit_code = NixHealth::print_report_returning_exit_code(&checks, args.quiet);
 

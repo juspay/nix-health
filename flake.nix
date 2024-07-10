@@ -47,7 +47,7 @@
         just-flake.features = {
           treefmt.enable = true;
           rust.enable = true;
-          # convco.enable = true;
+          convco.enable = true;
         };
 
         # Add your auto-formatters here.
@@ -62,7 +62,7 @@
 
         devShells.default = pkgs.mkShell {
           name = "nix-health";
-          packages = [ pkgs.cargo-watch ];
+          packages = [ pkgs.cargo-watch pkgs.convco ];
           inputsFrom = [
             self'.devShells.nix_health
             config.treefmt.build.devShell

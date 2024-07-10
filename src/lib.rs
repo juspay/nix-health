@@ -60,9 +60,7 @@ impl NixHealth {
     ///
     /// Fallback to using the default health check config if the flake doesn't
     /// override it.
-    pub async fn from_flake(
-        url: nix_rs::flake::url::FlakeUrl,
-    ) -> Result<Self, nix_rs::command::NixCmdError> {
+    pub async fn from_flake(url: &FlakeUrl) -> Result<Self, nix_rs::command::NixCmdError> {
         nix_eval_attr_json(
             &NixCmd::default(),
             &url.with_fully_qualified_root_attr("nix-health"),

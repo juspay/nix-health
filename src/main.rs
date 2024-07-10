@@ -51,7 +51,7 @@ async fn run_checks(flake_url: Option<FlakeUrl>) -> anyhow::Result<Vec<Check>> {
     let health: NixHealth = match flake_url.as_ref() {
         Some(flake_url) => {
             println!("{}, using config from flake '{}':", action_msg, flake_url);
-            NixHealth::from_flake(flake_url.clone()).await
+            NixHealth::from_flake(flake_url).await
         }
         None => {
             println!("{}:", action_msg);

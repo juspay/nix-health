@@ -10,6 +10,7 @@
     systems.url = "github:nix-systems/default";
     rust-flake.url = "github:juspay/rust-flake";
     rust-flake.inputs.nixpkgs.follows = "nixpkgs";
+    just-flake.url = "github:juspay/just-flake";
 
     # Dev tools
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -20,6 +21,7 @@
       systems = import inputs.systems;
       imports = [
         inputs.treefmt-nix.flakeModule
+        inputs.just-flake.flakeModule
         inputs.rust-flake.flakeModules.default
         inputs.rust-flake.flakeModules.nixpkgs
         ./module/flake-module.nix
@@ -42,6 +44,12 @@
           CARGO_BUILD_RUSTFLAGS = "-C target-feature=+crt-static";
         };
 
+        just-flake.features = {
+          treefmt.enable = true;
+          rust.enable = true;
+          # convco.enable = true;
+        };
+
         # Add your auto-formatters here.
         # cf. https://numtide.github.io/treefmt/
         treefmt.config = {
@@ -53,10 +61,13 @@
         };
 
         devShells.default = pkgs.mkShell {
+          name = "nix-health";
+          packages = [ pkgs.cargo-watch ];
           inputsFrom = [
             self'.devShells.nix_health
             config.treefmt.build.devShell
             config.nix-health.outputs.devShell
+            config.just-flake.outputs.devShell
           ];
         };
         packages.default = self'.packages.nix_health.overrideAttrs ({

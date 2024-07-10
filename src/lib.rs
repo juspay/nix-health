@@ -4,8 +4,11 @@ pub mod check;
 pub mod report;
 pub mod traits;
 
+use colored::Colorize;
+
 use check::direnv::Direnv;
 use nix_rs::command::NixCmd;
+use nix_rs::flake::eval::nix_eval_attr_json;
 use nix_rs::flake::url::FlakeUrl;
 use serde::{Deserialize, Serialize};
 use tracing::instrument;
@@ -56,12 +59,13 @@ impl NixHealth {
     ///
     /// Fallback to using the default health check config if the flake doesn't
     /// override it.
-    pub async fn from_flake(
-        url: nix_rs::flake::url::FlakeUrl,
-    ) -> Result<Self, nix_rs::command::NixCmdError> {
-        let nix = NixCmd::default();
-        use nix_rs::flake::eval::nix_eval_attr_json;
-        nix_eval_attr_json(&nix, &url, true).await
+    pub async fn from_flake(url: &FlakeUrl) -> Result<Self, nix_rs::command::NixCmdError> {
+        nix_eval_attr_json(
+            &NixCmd::default(),
+            &url.with_fully_qualified_root_attr("nix-health"),
+            true,
+        )
+        .await
     }
 
     /// Run all checks and collect the results
@@ -73,12 +77,81 @@ impl NixHealth {
     ) -> Vec<traits::Check> {
         tracing::info!("🩺 Running health checks");
         self.into_iter()
-            .flat_map(|c| c.check(nix_info, flake_url.clone()))
+            .flat_map(|c| c.check(nix_info, flake_url.as_ref()))
             .collect()
+    }
+
+    pub fn print_report_returning_exit_code(checks: &[traits::Check], quiet: bool) -> i32 {
+        let mut res = AllChecksResult::new();
+        for check in checks {
+            match &check.result {
+                traits::CheckResult::Green => {
+                    if !quiet {
+                        println!("{}", format!("✅ {}", check.title).green().bold());
+                        println!("   {}", check.info.blue());
+                    }
+                }
+                traits::CheckResult::Red { msg, suggestion } => {
+                    res.register_failure(check.required);
+                    if check.required {
+                        println!("{}", format!("❌ {}", check.title).red().bold());
+                    } else {
+                        println!("{}", format!("🟧 {}", check.title).yellow().bold());
+                    }
+                    println!("   {}", check.info.blue());
+                    println!("   {}", msg.yellow());
+                    println!("   {}", suggestion);
+                }
+            }
+        }
+        res.report()
     }
 
     pub fn schema() -> Result<String, serde_json::Error> {
         serde_json::to_string_pretty(&NixHealth::default())
+    }
+}
+
+/// A convenient type to aggregate check failures, and summary report at end.
+enum AllChecksResult {
+    Pass,
+    PassSomeFail,
+    Fail,
+}
+
+impl AllChecksResult {
+    fn new() -> Self {
+        AllChecksResult::Pass
+    }
+
+    fn register_failure(&mut self, required: bool) {
+        if required {
+            *self = AllChecksResult::Fail;
+        } else if matches!(self, AllChecksResult::Pass) {
+            *self = AllChecksResult::PassSomeFail;
+        }
+    }
+
+    /// Print a summary report of the checks and return the exit code
+    fn report(self) -> i32 {
+        match self {
+            AllChecksResult::Pass => {
+                println!("{}", "✅ All checks passed".green().bold());
+                0
+            }
+            AllChecksResult::PassSomeFail => {
+                println!(
+                    "{}, {}",
+                    "✅ Required checks passed".green().bold(),
+                    "but some non-required checks failed".yellow().bold()
+                );
+                0
+            }
+            AllChecksResult::Fail => {
+                println!("{}", "❌ Some required checks failed".red().bold());
+                1
+            }
+        }
     }
 }
 

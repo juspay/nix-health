@@ -22,7 +22,7 @@ impl Default for Direnv {
 }
 
 impl Checkable for Direnv {
-    fn check(&self, _nix_info: &info::NixInfo, flake_url: Option<FlakeUrl>) -> Vec<Check> {
+    fn check(&self, _nix_info: &info::NixInfo, flake_url: Option<&FlakeUrl>) -> Vec<Check> {
         let mut checks = vec![];
         if !self.enable {
             return checks;

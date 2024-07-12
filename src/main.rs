@@ -23,14 +23,17 @@ pub struct Args {
 async fn main() -> anyhow::Result<()> {
     human_panic::setup_panic!();
     let args = Args::parse();
+
+    nix_health::logging::setup_logging(args.quiet);
+
     if args.dump_schema {
-        println!("{}", NixHealth::schema()?);
+        tracing::info!("{}", NixHealth::schema()?);
         return Ok(());
     }
 
     let checks = run_checks(args.flake_url).await?;
 
-    let exit_code = NixHealth::print_report_returning_exit_code(&checks, args.quiet);
+    let exit_code = NixHealth::print_report_returning_exit_code(&checks);
 
     std::process::exit(exit_code)
 }
@@ -50,11 +53,11 @@ async fn run_checks(flake_url: Option<FlakeUrl>) -> anyhow::Result<Vec<Check>> {
     );
     let health: NixHealth = match flake_url.as_ref() {
         Some(flake_url) => {
-            println!("{}, using config from flake '{}':", action_msg, flake_url);
+            tracing::info!("{}, using config from flake '{}':", action_msg, flake_url);
             NixHealth::from_flake(flake_url).await
         }
         None => {
-            println!("{}:", action_msg);
+            tracing::info!("{}:", action_msg);
             Ok(NixHealth::default())
         }
     }?;

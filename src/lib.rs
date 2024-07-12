@@ -1,6 +1,7 @@
 //! Health checks for the user's Nix install
 
 pub mod check;
+pub mod logging;
 pub mod report;
 pub mod traits;
 
@@ -81,26 +82,36 @@ impl NixHealth {
             .collect()
     }
 
-    pub fn print_report_returning_exit_code(checks: &[traits::Check], quiet: bool) -> i32 {
+    pub fn print_report_returning_exit_code(checks: &[traits::Check]) -> i32 {
         let mut res = AllChecksResult::new();
         for check in checks {
             match &check.result {
                 traits::CheckResult::Green => {
-                    if !quiet {
-                        println!("{}", format!("✅ {}", check.title).green().bold());
-                        println!("   {}", check.info.blue());
-                    }
+                    tracing::info!(
+                        "✅ {}\n   {}",
+                        check.title.green().bold(),
+                        check.info.blue()
+                    );
                 }
                 traits::CheckResult::Red { msg, suggestion } => {
                     res.register_failure(check.required);
                     if check.required {
-                        println!("{}", format!("❌ {}", check.title).red().bold());
+                        tracing::error!(
+                            "❌ {}\n    {}\n   {}\n   {}",
+                            check.title.red().bold(),
+                            check.info.blue(),
+                            msg.yellow(),
+                            suggestion
+                        );
                     } else {
-                        println!("{}", format!("🟧 {}", check.title).yellow().bold());
+                        tracing::warn!(
+                            "🟧 {}\n   {}\n   {}\n   {}",
+                            check.title.yellow().bold(),
+                            check.info.blue(),
+                            msg.yellow(),
+                            suggestion
+                        );
                     }
-                    println!("   {}", check.info.blue());
-                    println!("   {}", msg.yellow());
-                    println!("   {}", suggestion);
                 }
             }
         }
@@ -136,11 +147,11 @@ impl AllChecksResult {
     fn report(self) -> i32 {
         match self {
             AllChecksResult::Pass => {
-                println!("{}", "✅ All checks passed".green().bold());
+                tracing::info!("{}", "✅ All checks passed".green().bold());
                 0
             }
             AllChecksResult::PassSomeFail => {
-                println!(
+                tracing::warn!(
                     "{}, {}",
                     "✅ Required checks passed".green().bold(),
                     "but some non-required checks failed".yellow().bold()
@@ -148,7 +159,7 @@ impl AllChecksResult {
                 0
             }
             AllChecksResult::Fail => {
-                println!("{}", "❌ Some required checks failed".red().bold());
+                tracing::error!("{}", "❌ Some required checks failed".red().bold());
                 1
             }
         }

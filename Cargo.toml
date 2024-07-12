@@ -25,6 +25,7 @@ serde_json = "1.0"
 serde_with = { version = "3.2", features = ["json"] }
 tokio = { version = "1.29", features = ["full"] }
 tracing = "0.1"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 url = { version = "2.4", features = ["serde"] }
 nix_rs = "0.5.0"
 direnv = "0.1.1"

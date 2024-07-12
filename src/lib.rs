@@ -16,7 +16,7 @@ use tracing::instrument;
 
 use self::check::{
     caches::Caches, flake_enabled::FlakeEnabled, max_jobs::MaxJobs, min_nix_version::MinNixVersion,
-    rosetta::Rosetta, trusted_users::TrustedUsers,
+    rosetta::Rosetta, rosetta_installed::RosettaInstalled, trusted_users::TrustedUsers,
 };
 
 /// Nix Health check information for user's install
@@ -32,6 +32,7 @@ pub struct NixHealth {
     pub system: check::system::System,
     pub trusted_users: TrustedUsers,
     pub rosetta: Rosetta,
+    pub rosetta_installed: RosettaInstalled,
     pub direnv: Direnv,
 }
 
@@ -43,6 +44,7 @@ impl<'a> IntoIterator for &'a NixHealth {
     fn into_iter(self) -> Self::IntoIter {
         let items: Vec<Self::Item> = vec![
             &self.rosetta,
+            &self.rosetta_installed,
             &self.nix_version,
             &self.flake_enabled,
             &self.system,

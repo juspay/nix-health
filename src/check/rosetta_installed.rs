@@ -24,8 +24,6 @@ impl Checkable for RosettaInstalled {
         _: Option<&nix_rs::flake::url::FlakeUrl>,
     ) -> Vec<Check> {
         let mut checks = vec![];
-        let rosetta_installed = is_rosetta_installed();
-
         if let (
             true,
             OS::MacOS {
@@ -37,7 +35,7 @@ impl Checkable for RosettaInstalled {
             let check = Check {
                 title: "Rosetta Installed".to_string(),
                 info: "".to_string(),
-                result: if rosetta_installed {
+                result: if is_rosetta_installed() {
                     CheckResult::Green
                 } else {
                     CheckResult::Red {

@@ -16,8 +16,7 @@ use tracing::instrument;
 
 use self::check::{
     caches::Caches, flake_enabled::FlakeEnabled, max_jobs::MaxJobs, min_nix_version::MinNixVersion,
-    rosetta::Rosetta, rosetta_installed::RosettaInstalled,
-    trusted_users::TrustedUsers,
+    rosetta::Rosetta, rosetta_installed::RosettaInstalled, trusted_users::TrustedUsers,
 };
 
 /// Nix Health check information for user's install
